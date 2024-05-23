@@ -1,6 +1,7 @@
 package com.generation.blogpessoal.controller;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
-
+import com.generation.blogpessoal.repository.TemaRepository;
 import jakarta.validation.Valid;
 
 @RestController //notação que diz ao spring q essa é uma controladora de rotas e acesso aos metodos
@@ -29,6 +30,9 @@ public class PostagemController {
 	
 	@Autowired //notação p injeção de dependencias = instanciar a classe PostagemRepository, em vez de instanciar a classe tda vez q for usar um objeto da JPA
 	private PostagemRepository postagemRepository;
+	
+	@Autowired 
+	private TemaRepository temaRepository;
 	
 	@GetMapping //define o verbo http que atende o metodo abaixo dessa notação
 	public ResponseEntity<List<Postagem>> getAll () { // o list define que vao ser varias postagens Postagem é o nome do metodo. Pode ser oq vc quiser
@@ -54,18 +58,25 @@ public class PostagemController {
 	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem){ /* Definição do metodo post.O "post" é o nome do método. Pode ser qlqr um. 
 		As notações trazem ações prontas sem necessidade de escrita maior de cod. 
 		A notação valid valida a qnt min e max de caracteres indicada anteriormente. e resuqestbody indica q será solicitado e exibido um corpo*/
-		return ResponseEntity.status(HttpStatus.CREATED) //retorna em formato ResponseEntity IGUAL ao metodo
+		if (temaRepository.existsById(postagem.getTema().getId()))
+		
+			return ResponseEntity.status(HttpStatus.CREATED) //retorna em formato ResponseEntity IGUAL ao metodo
 				.body(postagemRepository.save(postagem)); //definição doq será visualizado no corpo. SAVE = INSERTINTO. Metodo da repository  salva o post e mostra
+		
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O tema não existe", null);
 	}
 	@PutMapping
 	public ResponseEntity <Postagem> put(@Valid @RequestBody Postagem postagem){ //cuidado c espaço depois de put/nome do metodo
+		if (postagemRepository.existsById(postagem.getId())) {
+			if(temaRepository.existsById(postagem.getTema().getId())) {
 		
-		return postagemRepository.findById(postagem.getId()) //o findbyid vai buscar se o id indicado no corpo da requisição existe no db. Se sim executa o map 
-				.map(resposta-> ResponseEntity.status(HttpStatus.OK) // o map retorna o status cod ok 200e vai p body
-				.body(postagemRepository.save(postagem)))
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()); //se o find e o map não funcionarem executa o orelse retornando o status cod notfound 404 e build
+			return ResponseEntity.status(HttpStatus.OK) 
+				.body(postagemRepository.save(postagem));
+			}
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O tema não existe", null);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
-	
 	//DELETE FROM tb_postagens WHERE id =id;
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) { //opath variable garante que somente algo especifico vai ser deletado. Não odb todo
