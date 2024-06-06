@@ -45,64 +45,47 @@ public class Usuario {
 	
 	
 
-	public Usuario(Long id,  String nome, String usuario, String foto, String senha) {
-		this.id = id;
-		this.nome = nome;
-		this.usuario = usuario;
-		this.senha = senha;
-		this.foto = foto;
-	}
-	public Usuario() {
-		
-	}
-	/* Insira os Getters and Setters */
-
 	public Long getId() {
-		return this.id;
+		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getNome() {
-		return this.nome;
+		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 	public String getUsuario() {
-		return this.usuario;
+		return usuario;
 	}
-
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-
 	public String getSenha() {
-		return this.senha;
+		return senha;
 	}
-
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
 	public String getFoto() {
-		return this.foto;
+		return foto;
 	}
-
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
+	public Usuario(Long id,  String nome, String usuario, String senha, String foto) {
+		this.id = id;
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+		this.foto = foto;
+		
+	}
+	public Usuario() {	}
+	/* Insira os Getters and Setters */
 
-	public List<Postagem> getPostagem() {
-		return this.postagem;
 	}
 
-	public void setPostagem(List<Postagem> postagem) {
-		this.postagem = postagem;
-	}
-
-}
+	

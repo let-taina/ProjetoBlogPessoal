@@ -75,6 +75,7 @@ public class UsuarioService {
 				usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getUsuario()));
 				usuarioLogin.get().setSenha(""); //n sera informada aqui, será pelo usuario, e será criptografada
 				
+				
 				return usuarioLogin;
 			}
 		}
