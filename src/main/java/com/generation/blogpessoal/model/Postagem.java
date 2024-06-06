@@ -35,6 +35,11 @@ public class Postagem {
 	@UpdateTimestamp //pega a data e hora do sistema e preenche no banco de dados
 	private LocalDateTime data;
 	
+	
+	@ManyToOne
+	@JsonIgnoreProperties("postagem") ////// PARTE DE RELACIONAMENTO USUARIO C SEGURANÇA GERAR GETTER AND SETTERS!
+	private Usuario usuario;
+	
 	@ManyToOne //mtas postagens podem pertencer a apenas um tema
 	@JsonIgnoreProperties("postagem") //evita looping infinito (quebra do cod) n permitindo q o tema puxe a postagem e a postagem puxe o tema, e o tema puxe a post...
 	private Tema tema; //o primeiro Tema é o tipo de dado, o nome da modelagem inteira (id, descrição, etc) e o segundo é oq vai ser trazido/nome do campo
@@ -78,6 +83,14 @@ public class Postagem {
 
 	public void setTema(Tema tema) {
 		this.tema = tema;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	
 	
